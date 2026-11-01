@@ -1,10 +1,10 @@
 extends Node2D
-## Story 001 test board: a walled portrait box with the bottom open, one block of
-## indestructible placeholder bricks, and the launcher.
-## Implements design/game-brief.md MVP feature 1 (build order step 1).
+## Test board: a walled portrait box with the bottom open, one block of bricks with
+## health, and the launcher. Each broken brick adds its XP to run_state.
+## Implements design/game-brief.md MVP features 1 and 2 (Stories 001 and 002).
 ## Walls and bricks are on collision layer 1; balls (layer 2) mask layer 1.
 
-const BRICK_SCENE: PackedScene = preload("res://src/gameplay/board/placeholder_brick.tscn")
+const BRICK_SCENE: PackedScene = preload("res://src/gameplay/bricks/brick.tscn")
 
 ## Playfield size in pixels (matches the 540x960 portrait viewport).
 @export var board_size: Vector2 = Vector2(540.0, 960.0)
@@ -16,6 +16,8 @@ const BRICK_SCENE: PackedScene = preload("res://src/gameplay/board/placeholder_b
 @export var bottom_line_y: float = 870.0
 ## Where balls are launched from (fixed).
 @export var launch_point: Vector2 = Vector2(270.0, 860.0)
+## Brick type (starting health and XP value) given to every brick in the block.
+@export var brick_type: BrickType
 ## Brick block columns.
 @export var brick_columns: int = 7
 ## Brick block rows.
@@ -36,6 +38,9 @@ const BRICK_SCENE: PackedScene = preload("res://src/gameplay/board/placeholder_b
 @export var wall_color: Color = Color("#3b4270")
 ## Colour of the bottom line.
 @export var bottom_line_color: Color = Color(1.0, 0.2, 0.25, 0.5)
+
+## The run's state (XP total). Listen to run_state.xp_changed to follow the XP total.
+var run_state: RunState = RunState.new()
 
 @onready var _launcher: Launcher = $Launcher
 
@@ -78,8 +83,9 @@ func _build_bricks() -> void:
 	var left: float = (board_size.x - grid_width) * 0.5
 	for row: int in brick_rows:
 		for column: int in brick_columns:
-			var brick: PlaceholderBrick = BRICK_SCENE.instantiate()
-			brick.setup(brick_size, row_colors[row % row_colors.size()])
+			var brick: Brick = BRICK_SCENE.instantiate()
+			brick.setup(brick_type, brick_size, row_colors[row % row_colors.size()])
+			brick.broken.connect(run_state.add_xp)
 			brick.position = Vector2(
 				left + brick_size.x * 0.5 + column * (brick_size.x + brick_gap),
 				brick_grid_top + brick_size.y * 0.5 + row * (brick_size.y + brick_gap))

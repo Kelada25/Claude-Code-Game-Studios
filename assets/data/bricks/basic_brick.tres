@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="BrickType" load_steps=2 format=3]
+
+[ext_resource type="Script" path="res://src/gameplay/bricks/brick_type.gd" id="1_type"]
+
+[resource]
+script = ExtResource("1_type")
+max_health = 3
+xp_value = 10

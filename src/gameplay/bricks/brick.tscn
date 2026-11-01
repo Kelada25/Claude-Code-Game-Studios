@@ -1,8 +1,8 @@
 [gd_scene load_steps=2 format=3]
 
-[ext_resource type="Script" path="res://src/gameplay/board/placeholder_brick.gd" id="1_brick"]
+[ext_resource type="Script" path="res://src/gameplay/bricks/brick.gd" id="1_brick"]
 
-[node name="PlaceholderBrick" type="StaticBody2D"]
+[node name="Brick" type="StaticBody2D"]
 collision_layer = 1
 collision_mask = 0
 script = ExtResource("1_brick")

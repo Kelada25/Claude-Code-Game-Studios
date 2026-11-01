@@ -8,6 +8,7 @@ ball_count = 5
 fire_interval_sec = 0.07
 ball_speed = 900.0
 ball_radius = 8.0
+ball_damage = 1
 min_aim_angle_degrees = 12.0
 min_vertical_speed_ratio = 0.08
 aim_line_max_length = 1600.0

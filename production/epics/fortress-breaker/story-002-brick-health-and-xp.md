@@ -1,12 +1,12 @@
 # Story 002: Brick health and XP
 
 > **Epic**: Fortress Breaker
-> **Status**: Ready
+> **Status**: Complete
 > **Layer**: Core
 > **Type**: Logic
 > **Estimate**: S
 > **Manifest Version**: N/A (minimal — no control manifest)
-> **Last Updated**: — (set by /dev-story when implementation begins)
+> **Last Updated**: 2026-11-02
 
 ## Context
 
@@ -59,16 +59,15 @@
 
 ## Files
 
-*Planned; `/dev-story` replaces this list with the files it changed.*
-
-- `src/gameplay/bricks/brick.gd`
-- `src/gameplay/bricks/brick.tscn`
-- `src/gameplay/bricks/brick_type.gd`
-- `assets/data/bricks/basic_brick.tres`
-- `src/gameplay/run/run_state.gd`
-- `tests/unit/bricks/bricks_health_xp_test.gd`
-
----
+- `src/gameplay/bricks/brick_type.gd` (+ `.uid`) — created (BrickType data class)
+- `src/gameplay/bricks/brick.gd` (+ `.uid`), `src/gameplay/bricks/brick.tscn` — created (destructible brick, draws its health)
+- `src/gameplay/run/run_state.gd` (+ `.uid`) — created (run XP total, `xp_changed`)
+- `assets/data/bricks/basic_brick.tres` — created (health 3, XP 10)
+- `src/gameplay/board/board.gd`, `src/gameplay/board/board.tscn` — modified (real bricks, XP into `run_state`)
+- `src/gameplay/volley/ball.gd` — modified (a bounce off a brick hits it)
+- `src/gameplay/volley/volley_config.gd`, `assets/data/volley_config.tres` — modified (`ball_damage = 1`)
+- `src/gameplay/board/placeholder_brick.gd` (+ `.uid`), `placeholder_brick.tscn` — deleted (replaced by the real brick)
+- `production/qa/evidence/story-002-brick-health-and-xp/` — 3 screenshots + `stamp.txt`
 
 ## QA Test Cases
 
@@ -84,7 +83,7 @@
 **Required evidence**:
 - Logic: `tests/unit/bricks/bricks_health_xp_test.gd` — advisory at `qa.level: minimal`
 
-**Status**: [ ] Not yet created
+**Status**: [x] Unit test waived at qa.level minimal. Evidence instead: 3 retained frames and a re-runnable headless check (`verify_story002.gd`, with its saved output) in `production/qa/evidence/story-002-brick-health-and-xp/`
 
 ---
 
@@ -92,3 +91,12 @@
 
 - Depends on: `production/epics/fortress-breaker/story-001-aim-and-fire-volley.md`
 - Unlocks: `production/epics/fortress-breaker/story-003-powerups.md`, `production/epics/fortress-breaker/story-004-xp-bar-and-level-up.md`, `production/epics/fortress-breaker/story-005-fortress-stages.md`
+
+---
+
+## Completion Notes
+**Completed**: 2026-11-02
+**Criteria**: 7/7 passing. AC-1 to AC-3 and AC-7 are backed by retained frames; AC-4 to AC-6 by the headless check, which Alex Kelada accepted as the evidence.
+**Deviations**: Advisory only. AC-5 was checked by repeated direct hits on one brick, not by real balls colliding in the same frame. `ball.gd`, `volley_config` (new `ball_damage`) and `board.gd` changed although they weren't in the original file plan; the criteria need them and they are now listed under Files.
+**Test Evidence**: waived at qa.level minimal; 3 frames plus `verify_story002.gd` and `verify_story002-output.txt` (12 of 12 PASS) under `production/qa/evidence/story-002-brick-health-and-xp/`
+**Reviewed by**: self, no independent review (Solo mode). Godot specialist engine-API check ran in /dev-story: no blocking findings; 3 minor, unfixed (a board with no `brick_type` assigned would crash, `collision_layer` is set directly and may need `set_deferred` if Story 005's explosions call `take_hit` from a physics callback, and 4.7's thinner line drawing).

@@ -1,0 +1,17 @@
+# Output of verify_story002.gd, run 2026-11-02 against the working tree stamped in stamp.txt (Godot 4.7.2)
+# Re-run from the repo root: /Applications/Godot.app/Contents/MacOS/Godot --headless --path . -s production/qa/evidence/story-002-brick-health-and-xp/verify_story002.gd
+PASS: basic_brick.tres: max_health 3, xp_value 10
+PASS: brick starts at its type's health (3)
+PASS: hit without a break: health 3 -> 2, no XP
+PASS: break grants the type's XP (10)
+PASS: broken brick stops colliding (layer 0)
+PASS: broken brick is queued for removal
+PASS: more hits in the same frame after the break: one XP grant, one signal
+PASS: overkill hit breaks once; xp_changed carries the new total (20)
+PASS: board builds 35 real bricks (got 35)
+INFO: volley broke 1 brick(s); damaged survivors: 1@(486,255); run XP 10; xp_changed totals [10]
+PASS: a 5-ball volley breaks at least one brick
+PASS: board XP equals 10 per broken brick
+PASS: one xp_changed per broken brick
+RESULT: 0 failure(s)
+exit=0

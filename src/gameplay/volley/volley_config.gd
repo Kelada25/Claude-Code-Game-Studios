@@ -1,8 +1,9 @@
 class_name VolleyConfig
 extends Resource
 ## Tuning values for the aim-and-fire volley.
-## Implements design/game-brief.md MVP feature 1 (Story 001). Instanced as
-## assets/data/volley_config.tres so designers tune without touching code.
+## Implements design/game-brief.md MVP feature 1 (Story 001); ball_damage is MVP feature 2
+## (Story 002). Instanced as assets/data/volley_config.tres so designers tune without
+## touching code.
 
 ## Number of balls fired per volley.
 @export_range(1, 200) var ball_count: int = 5
@@ -15,6 +16,9 @@ extends Resource
 
 ## Ball radius in pixels (collision shape and drawn circle).
 @export_range(2.0, 32.0, 0.5) var ball_radius: float = 8.0
+
+## Damage one ball hit deals to a brick.
+@export_range(1, 1000) var ball_damage: int = 1
 
 ## Smallest allowed aim angle above horizontal, in degrees, on both the left and right side.
 @export_range(0.0, 80.0, 0.5) var min_aim_angle_degrees: float = 12.0

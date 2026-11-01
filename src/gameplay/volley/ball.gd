@@ -1,7 +1,8 @@
 class_name Ball
 extends CharacterBody2D
 ## One volley ball: constant-speed bouncing via move_and_collide.
-## Implements design/game-brief.md MVP feature 1 (Story 001).
+## Implements design/game-brief.md MVP features 1 and 2 (Stories 001, 002): a bounce off a
+## brick also hits it for the configured ball damage.
 ## Balls sit on collision layer 2 and mask layer 1 (walls, bricks) only, so balls
 ## never collide with each other (set in ball.tscn).
 
@@ -41,6 +42,11 @@ func _physics_process(delta: float) -> void:
 		# Only reflect when moving into the surface; a ball already leaving it keeps its heading.
 		if velocity.dot(normal) < 0.0:
 			velocity = _bounced_velocity(velocity, normal)
+			# One bounce off a brick is one hit on it. A ball in resting contact never
+			# reflects, so it does not hit again every physics step.
+			var brick := collision.get_collider() as Brick
+			if brick != null:
+				brick.take_hit(_config.ball_damage)
 		# Continue the leftover distance along the new heading so no motion is lost.
 		remaining = velocity.normalized() * collision.get_remainder().length()
 		if remaining.is_zero_approx():
